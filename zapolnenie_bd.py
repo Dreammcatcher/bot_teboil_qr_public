@@ -117,4 +117,4 @@ def update_balance():
     session.commit()
 
 
-update_balance()
+#update_balance()
