@@ -6,8 +6,8 @@ from aiogram.utils.exceptions import MessageCantBeDeleted, MessageToDeleteNotFou
 from config.filters import IsAdmin
 from models.model import session, Teboil, UserId
 from config.states import UserState
-from config.config_bot import change_api, dp, logging, bot, bot_token, time_del_kart
-from utils.utils_func import append_user_to_bd, responce_to_teboil_after_update, create_qr_after_update, more_than
+from config.config_bot import dp, logging, bot, bot_token, time_del_kart
+from utils.utils_func import append_user_to_bd, create_qr_after_update
 from handlers.commands import count_bad_enter, blacklist_name, start, give_logs, give_blacklist, clear_blacklist, \
     append_user_to_blacklicst, append_user, send_message, delete_status_sell, readme, \
     bot_give_me_number_sold, give_me_qrcode
@@ -39,7 +39,6 @@ async def enter(message: types.Message):
             status_sell = session.query(Teboil.status_sell).filter_by(code=enters_code).first()
             if (status_sell[0]) is None:
                 await bot.send_message(message.chat.id, 'Ожидайте идет генерация карты...')
-                lvl_kart = 'Agate'
                 balance = session.query(Teboil.balans).filter_by(code=enters_code).first()[0]
 
                 logging.info(f'Введен правильный код - {enters_code}, пользователь - {user_info}')

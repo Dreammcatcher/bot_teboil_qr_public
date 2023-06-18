@@ -1,8 +1,8 @@
-
-# заполнение БД
 import binascii
 import datetime
 import hashlib
+import time
+
 from models.model import session, Teboil
 
 
@@ -106,3 +106,15 @@ def zapoln_bd():
 
 
 def update_balance():
+    with open('tb_acc_recheck_dublicate.txt', 'r') as f:
+        data = [x.rstrip() for x in f.readlines()]
+    for i in data:
+        i = i.split(':')
+        num_kart = i[1]
+        type_kart = i[2]
+        balance = i[3]
+        session.query(Teboil).filter_by(num_kart=int(num_kart)).update({'lvl_card': type_kart, 'balans': balance})
+    session.commit()
+
+
+update_balance()

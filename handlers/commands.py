@@ -1,10 +1,9 @@
-import time
 from aiogram import types
 from aiogram.types import ReplyKeyboardRemove
 from config.config_bot import bot, logging
 from config.states import UserState
 from models.model import session, UserId, Teboil
-from io import BytesIO, StringIO
+from io import StringIO
 
 from utils.utils_func import create_qr_after_update
 
