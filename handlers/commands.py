@@ -1,5 +1,4 @@
 import time
-
 from aiogram import types
 from aiogram.types import ReplyKeyboardRemove
 from config.config_bot import bot, logging
@@ -7,6 +6,7 @@ from config.states import UserState
 from models.model import session, UserId, Teboil
 from io import BytesIO, StringIO
 
+from utils.utils_func import create_qr_after_update
 
 blacklist_name = dict()
 count_bad_enter = dict()
@@ -134,32 +134,21 @@ async def give_me_qrcode(message: types.Message):
     else:
         balance = mes[1]
         dat = session.query(Teboil.balans, Teboil.code).filter_by(status_sell=None).all()
-        for i in dat:
-            if int(balance) - 50 < i[0] < int(balance) + 50:
-                resp = get_info_user(i[1], ip)
-                qr_user = resp.json()['QRcode']
-                resp_balance = resp.json()['CurrentBonus']
-                session.query(Teboil).filter_by(token=i[1]).update({'qrcode': qr_user,
-                                                                   'type_kart': resp.json()['BonusStatus']['Title'],
-                                                                   'balance': resp_balance,
-                                                                   'curent_sum': resp.json()['CurrentSum']})
+        for balans, code in dat:
+            if int(balance) - 50 < balans < int(balance) + 50:
+                lvl_kart = 'Agate'
+                num_kart = session.query(Teboil.num_kart).filter_by(code=code).first()
+                img_kart = await create_qr_after_update(num_kart[0], lvl_kart, balans)
+                await bot.send_message(message.chat.id, 'Подходящая карта найдена')
+                await bot.send_message(message.chat.id, '👉Загружается QR...\n')
+                await bot.send_photo(message.chat.id, photo=img_kart)
+                await bot.send_message(message.chat.id, f'🟩 Баллы на карте - {balans}\n')
+                await bot.send_message(message.chat.id, f'После использования сними с продажи карту - {code}')
+                user_name = message.from_user.username
+                logging.info(f'Выдана карта админу - {code}, баланс - {balans}, пользователь - {user_name}\n')
+                session.query(Teboil).filter_by(code=code).update({'status_sell': 'SOLD',
+                                                                   'balans': balans,})
                 session.commit()
-                if int(balance) - 50 < int(resp_balance) < int(balance) + 50:
-                    image_qr = create_qr_bushe(qr_user)
-                    await bot.send_message(message.chat.id, 'Подходящая карта найдена')
-                    await bot.send_message(message.chat.id, '👉Загружается QR...\n')
-                    await bot.send_photo(message.chat.id, photo=image_qr)
-                    await bot.send_message(message.chat.id, f'🟩 Баллы на карте - {resp_balance}\n')
-                    hash_code = i[2]
-                    await bot.send_message(message.chat.id, f'После использования сними с продажи карту - {hash_code}')
-                    user_name = message.from_user.username
-                    logging.info(f'Выдана карта админу - {hash_code}, баланс - {resp_balance}, пользователь - {user_name}\n')
-                    session.query(Bushe).filter_by(code=hash_code).update({'status_sell': 'SOLD',
-                                                                           'balance': resp_balance,
-                                                                           'qrcode': qr_user})
-                    session.commit()
-                    break
-                else:
-                    time.sleep(2)
-                    continue
+                break
+
 

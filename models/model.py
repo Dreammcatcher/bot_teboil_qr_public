@@ -29,6 +29,6 @@ class UserId(Base):
 
 
 #engine = create_engine('sqlite:///c:/pythonProject/pivto4ka/db.sqlite3', echo=False, connect_args={'timeout': 100})
-engine = create_engine('sqlite:///.../pivto4ka/db.sqlite3', echo=False, connect_args={'timeout': 100})
+engine = create_engine('sqlite:///../pivto4ka/db.sqlite3', echo=False, connect_args={'timeout': 100})
 Base.metadata.create_all(engine)
 session = scoped_session(sessionmaker(bind=engine))
