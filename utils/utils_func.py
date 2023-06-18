@@ -19,7 +19,7 @@ async def create_qr_after_update(nomer, balance, name_lvl=None, ):
     :return объект собранной картинки карты лояльности
     """
     qrimg = qrcode.make(nomer)
-    img = Image.open('images/without_qr_new_logo_agate.png')
+    img = Image.open('images/com.teboil.azs_empty.png')
     # elif name_lvl == 'Sapphire':
     #     img = Image.open('images/teboil_sapphire.png')
     # elif name_lvl == 'Ruby':
@@ -27,19 +27,19 @@ async def create_qr_after_update(nomer, balance, name_lvl=None, ):
     # elif name_lvl == 'Diamond':
     #     img = Image.open('images/teboil_diamond.png')
 
-    font = ImageFont.truetype("images/Hakuna-Sans.otf", 60)
+    font = ImageFont.truetype("images/CriqueGroteskDisplay-BlackIt.ttf", 70)
     drawer = ImageDraw.Draw(img)
     if int(balance) > 999:
-        drawer.text((330, 524), str(balance), font=font, fill='white', stroke_width=0)
+        drawer.text((690, 678), str(balance), font=font, fill='white', stroke_width=0)
     else:
-        drawer.text((360, 524), str(balance), font=font, fill='white', stroke_width=0)
+        drawer.text((690, 678), str(balance), font=font, fill='white', stroke_width=0)
 
     width, height = qrimg.size
     barcod = qrimg.crop((37, 37, width - 37, height - 37))
 
-    qrimg = barcod.resize((665, 665))
+    qrimg = barcod.resize((655, 655))
     imag1 = img.copy()
-    imag1.paste(qrimg, (202, 768))
+    imag1.paste(qrimg, (211, 945))
     #imag1.save('ready.png', quality=100)
     image_kart_buffer = BytesIO()
     image_kart_buffer.name = 'ready.png'

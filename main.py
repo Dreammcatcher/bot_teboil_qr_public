@@ -49,9 +49,7 @@ async def enter(message: types.Message):
                                        '⚠️QR код  будет автоматически удален через - 3 часа\n\n'
                                        '👉Загружается карта лояльности...')
                 imag = await bot.send_photo(message.chat.id, photo=img_kart)
-                await bot.send_message(message.chat.id, f'🟩 Баллы на карте - {balance}\n'
-                                                        f'🟥 Тип карты - {lvl_kart}\n'
-                                                        )
+                await bot.send_message(message.chat.id, f'🟩 Баллов на карте - {balance}\n')
                 session.query(Teboil).filter_by(code=enters_code).update({'status_sell': 'SOLD'})
                 session.commit()
                 logging.info(f'Выдана карта - {enters_code}, баланс - {balance}, пользователь - {user_info}\n')

@@ -103,3 +103,6 @@ def zapoln_bd():
 
 
 #zapoln_bd()
+
+
+def update_balance():
