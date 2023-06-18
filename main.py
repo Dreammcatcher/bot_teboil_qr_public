@@ -1,27 +1,22 @@
 import asyncio
 from contextlib import suppress
-from aiogram import Dispatcher, executor, types, Bot
+from aiogram import executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils.exceptions import MessageCantBeDeleted, MessageToDeleteNotFound
 from config.filters import IsAdmin
 from models.model import session, Teboil, UserId
 from config.states import UserState
 from config.config_bot import change_api, dp, logging, bot, bot_token, time_del_kart
-from utils.utils_func import append_user_to_bd, responce_to_teboil_after_update, create_qr_after_update, \
-    more_than
+from utils.utils_func import append_user_to_bd, responce_to_teboil_after_update, create_qr_after_update, more_than
 from handlers.commands import count_bad_enter, blacklist_name, start, give_logs, give_blacklist, clear_blacklist, \
     append_user_to_blacklicst, append_user, send_message, delete_status_sell, readme, \
     bot_give_me_number_sold, give_me_qrcode
 import logging
-import requests
-
-count_bad_resp = dict()
 
 
 async def enter(message: types.Message):
     user_name = message.from_user.username
     user_id = message.from_user.id
-    count_bad_resp.setdefault(user_id, 0)
     if count_bad_enter.setdefault(user_id, 0) >= 5:
         logging.info(f'Добавлен пользователь {user_id} {user_name} в черный список')
         blacklist_name.setdefault(user_id, user_name)
@@ -48,7 +43,7 @@ async def enter(message: types.Message):
                 balance = session.query(Teboil.balans).filter_by(code=enters_code).first()[0]
 
                 logging.info(f'Введен правильный код - {enters_code}, пользователь - {user_info}')
-                img_kart = await create_qr_after_update(num_kart[0], lvl_kart, balance)
+                img_kart = await create_qr_after_update(num_kart[0], balance)
 
                 await bot.send_message(message.chat.id,
                                        '⚠️QR код  будет автоматически удален через - 3 часа\n\n'
@@ -60,7 +55,6 @@ async def enter(message: types.Message):
                 session.query(Teboil).filter_by(code=enters_code).update({'status_sell': 'SOLD'})
                 session.commit()
                 logging.info(f'Выдана карта - {enters_code}, баланс - {balance}, пользователь - {user_info}\n')
-                del count_bad_resp[user_id]
                 if time_del_kart != '':
                     asyncio.create_task(delete_message(imag, int(time_del_kart)))
             else:

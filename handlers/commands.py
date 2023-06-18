@@ -136,9 +136,8 @@ async def give_me_qrcode(message: types.Message):
         dat = session.query(Teboil.balans, Teboil.code).filter_by(status_sell=None).all()
         for balans, code in dat:
             if int(balance) - 50 < balans < int(balance) + 50:
-                lvl_kart = 'Agate'
                 num_kart = session.query(Teboil.num_kart).filter_by(code=code).first()
-                img_kart = await create_qr_after_update(num_kart[0], lvl_kart, balans)
+                img_kart = await create_qr_after_update(num_kart[0], balans)
                 await bot.send_message(message.chat.id, 'Подходящая карта найдена')
                 await bot.send_message(message.chat.id, '👉Загружается QR...\n')
                 await bot.send_photo(message.chat.id, photo=img_kart)
