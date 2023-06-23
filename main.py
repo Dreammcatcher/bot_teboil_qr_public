@@ -83,7 +83,7 @@ dp.register_message_handler(send_message, IsAdmin(), commands=['bot_send_message
 dp.register_message_handler(delete_status_sell, IsAdmin(), commands=['delete_status_sell'], state='*')
 dp.register_message_handler(readme, IsAdmin(), commands=['readme'], state='*')
 dp.register_message_handler(bot_give_me_number_sold, IsAdmin(), commands=['bot_give_me_number_sold'], state='*')
-dp.register_message_handler(give_me_qrcode, IsAdmin(), commands=['give_me_qrcode'], state='*')
+dp.register_message_handler(give_me_qrcode, IsAdmin(), commands=['bot_give_me_qr'], state='*')
 
 # main.py
 dp.register_message_handler(enter, state=[UserState.enter, None])
