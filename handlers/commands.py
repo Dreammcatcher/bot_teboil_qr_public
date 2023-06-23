@@ -111,6 +111,8 @@ async def readme(message: types.Message):
                                             '/delete_status_sell <hash code или тел> - удаление статуса "SOLD" в БД\n'
                                             'номер телефона в формате 79115553322\n'
                                             '/bot_give_me_number_sold - выдает коды проданных карт в файле\n'
+                                            '/bot_give_me_qrcode <qr> - выдает qrcode c случайными баллами от 500 до 2000\n'
+                                            '/bot_give_me_qrcode <qr> <сумма>- выдает qrcode c введенной суммой\n'
                                             '/bot_give_me_qrcode <сумма> - выдает qrcode приближенный к этой сумме +-50')
     await UserState.enter.set()
 
