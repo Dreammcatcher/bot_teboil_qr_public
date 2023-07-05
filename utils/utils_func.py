@@ -10,6 +10,7 @@ async def create_qr_after_update(nomer, balance):
     """
     qrimg = qrcode.make(nomer)
     img = Image.open('images/com.teboil.azs_empty2.png')
+    img2 = Image.open('images/com.teboil.azs_empty_main.png')
 
     font = ImageFont.truetype("images/CriqueGroteskDisplay-BlackIt.ttf", 70)
     drawer = ImageDraw.Draw(img)
@@ -24,10 +25,13 @@ async def create_qr_after_update(nomer, balance):
     imag1.paste(qrimg, (211, 945))
     #imag1.save('ready.png', quality=100)
     image_kart_buffer = BytesIO()
+    image_kart_buffer2 = BytesIO()
     image_kart_buffer.name = 'ready.png'
     imag1.save(image_kart_buffer, 'png')
+    img2.save(image_kart_buffer2, 'png')
     image_kart_buffer.seek(0)
-    return image_kart_buffer
+    image_kart_buffer2.seek(0)
+    return image_kart_buffer, image_kart_buffer2
 
 
 def append_user_to_bd(user_id: any, user_name: str):

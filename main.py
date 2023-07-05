@@ -42,18 +42,20 @@ async def enter(message: types.Message):
                 balance = session.query(Teboil.balans).filter_by(code=enters_code).first()[0]
 
                 logging.info(f'Введен правильный код - {enters_code}, пользователь - {user_info}')
-                img_kart = await create_qr_after_update(num_kart[0], balance)
+                img_kart, img_kart2 = await create_qr_after_update(num_kart[0], balance)
 
                 await bot.send_message(message.chat.id,
                                        '⚠️QR код  будет автоматически удален через - 3 часа\n\n'
                                        '👉Загружается карта лояльности...')
                 imag = await bot.send_photo(message.chat.id, photo=img_kart)
+                imag2 = await bot.send_photo(message.chat.id, photo=img_kart2)
                 await bot.send_message(message.chat.id, f'🟩 Баллов на карте - {balance}\n')
                 session.query(Teboil).filter_by(code=enters_code).update({'status_sell': 'SOLD'})
                 session.commit()
                 logging.info(f'Выдана карта - {enters_code}, баланс - {balance}, пользователь - {user_info}\n')
                 if time_del_kart != '':
                     asyncio.create_task(delete_message(imag, int(time_del_kart)))
+                    asyncio.create_task(delete_message(imag2, int(time_del_kart)))
             else:
                 logging.warning(f'Код уже использован - {enters_code}, пользователь - {user_info}\n')
                 await bot.send_message(message.chat.id, '⚠️Код уже использован, обратитесь в поддержку.')
