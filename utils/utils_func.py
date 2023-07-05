@@ -9,7 +9,7 @@ async def create_qr_after_update(nomer, balance):
     :return объект собранной картинки карты лояльности
     """
     qrimg = qrcode.make(nomer)
-    img = Image.open('images/com.teboil.azs_empty.png')
+    img = Image.open('images/com.teboil.azs_empty2.png')
 
     font = ImageFont.truetype("images/CriqueGroteskDisplay-BlackIt.ttf", 70)
     drawer = ImageDraw.Draw(img)
