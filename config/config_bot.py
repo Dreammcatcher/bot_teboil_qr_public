@@ -9,9 +9,9 @@ if not os.path.exists('logs'):
     os.makedirs('logs')
 
 
-# logging.basicConfig(level=logging.INFO,
-#                     format="%(asctime)s %(levelname)s %(message)s", encoding='utf-8',
-#                     handlers=[RotatingFileHandler('./logs/bot_logs.log', maxBytes=150000, backupCount=10)])
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(message)s", encoding='utf-8',
+                    handlers=[RotatingFileHandler('./logs/bot_logs.log', maxBytes=150000, backupCount=10)])
 
 
 # logging.disable(logging.WARNING)
